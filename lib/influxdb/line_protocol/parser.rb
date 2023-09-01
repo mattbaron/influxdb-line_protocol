@@ -8,8 +8,6 @@ module InfluxDB
         @index = -1
         @delim = [' ', ',', '=', nil]
 
-        @token_cache = []
-
         @token = nil
         @value = nil
 
