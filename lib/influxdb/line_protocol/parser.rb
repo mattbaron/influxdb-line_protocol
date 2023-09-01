@@ -55,7 +55,7 @@ module InfluxDB
             buff << c
           when nil
             return @token = :NIL unless in_quote
-            raise StandardError, 'Unexpected EOF'
+            raise ParseError, 'Unexpected end of string'
           when '\\'
             buff << '\\'
             buff << next_char
@@ -158,6 +158,7 @@ module InfluxDB
 
       def validate
         raise StandardError, 'No fields found' if @fields.size.zero?
+        # TODO: Validate timestamp
       end
     end
   end

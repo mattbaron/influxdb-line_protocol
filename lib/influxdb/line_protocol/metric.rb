@@ -44,6 +44,10 @@ module InfluxDB
         fields.each do |k, v|
           raise InvalidFieldError, "Invalid field value #{v}" unless v.start_with?('"') || numeric?(v)
         end
+
+        tags.each do |k, v|
+          raise InvalidTagError, "Invalid tag value: #{v}" if v =~ /[^\\]\s/
+        end
       end
 
       def numeric?(value)

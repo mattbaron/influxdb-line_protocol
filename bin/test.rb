@@ -16,6 +16,7 @@ lines = [
   'bad,dc=bar f=-87.23, 234234',
   'good f=999',
   'good,dc=foo,abc=sdfa f=123',
+  'bad,dc=foo,abc="Matt\ Baron" f1=2394',
   'foo'
 ]
 
