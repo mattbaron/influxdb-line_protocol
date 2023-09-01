@@ -7,6 +7,10 @@ require "influxdb/line_protocol/metric"
 module InfluxDB
   module LineProtocol
     class Error < StandardError; end
-    # Your code goes here...
+    class ParseError <  Error; end
+    class InvalidFormatError < Error; end
+    class InvalidFieldError < Error; end
+    class InvalidTagError < Error; end
+    class InvalidTimestampError < Error; end
   end
 end

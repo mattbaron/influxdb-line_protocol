@@ -13,7 +13,41 @@ module InfluxDB
       end
 
       def dump
-        puts "M: #{@measurement}\nT: #{@tags}\nF: #{@fields}\nT: #{@timestamp}\n\n"
+        puts "M: #{@measurement}\nT: #{@tags}\nF: #{@fields}\nT: #{@timestamp}\nL: #{to_s}\n\n"
+      end
+
+      def hash_to_s(hash)
+        buff = []
+        hash.each do |k, v|
+          buff << "#{k}=#{v}"
+        end
+        buff.join(',')
+      end
+
+      def to_s
+        buff = @measurement
+
+        if tags.size.positive?
+          buff += ",#{hash_to_s(@tags)}"
+        end
+
+        buff += " #{hash_to_s(@fields)} #{@timestamp}"
+
+        buff
+      end
+
+      def validate
+        raise InvalidFormatError, 'Line has no fields' if @fields.size.zero?
+
+        raise InvalidTimestampError, 'Invalid timestamp' unless @timestamp.match?(/^\d+$/)
+
+        fields.each do |k, v|
+          raise InvalidFieldError, "Invalid field value #{v}" unless v.start_with?('"') || numeric?(v)
+        end
+      end
+
+      def numeric?(value)
+        value.match?(/^-?((\d*\.\d+(e(\-|\+)\d+)?)|(\d+(u|i)?))$/)
       end
 
       def has_tag?(tag_name)

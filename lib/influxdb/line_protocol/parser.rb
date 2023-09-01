@@ -4,7 +4,7 @@ module InfluxDB
       attr_reader :metric
 
       def initialize(line)
-        @line = line
+        @line = line.strip
         @index = -1
         @delim = [' ', ',', '=', nil]
         @tokens = []
@@ -20,7 +20,7 @@ module InfluxDB
       end
 
       def parse_error(type)
-        raise StandardError, "Parse error - Expected #{:WORD}"
+        raise ParseError, "Parse error - Expected #{type}, found #{@token}: #{@line}"
       end
 
       def next_char
@@ -91,7 +91,7 @@ module InfluxDB
       def parse_tag
         type, tag_name = next_token
 
-        return true if type == :SPACE
+        # return true if type == :SPACE
 
         return false if type == :COMMA
 
@@ -105,22 +105,22 @@ module InfluxDB
 
         @metric.tags[tag_name] = tag_value
 
+        if peek == ' ' || peek == nil
+          next_token
+          return true
+        end
+
         false
       end
 
       def parse_tags
-        done = false
-        until done
-          done = parse_tag
-        end
+        until parse_tag; end
       end
 
       def parse_field
         type, field_name = next_token
 
         return true if type == :NIL
-
-        return true if type == :SPACE
 
         return false if type == :COMMA
 
@@ -134,14 +134,16 @@ module InfluxDB
 
         @metric.fields[field_name] = field_value
 
-        return false
+        if peek == ' ' || peek == nil
+          next_token
+          return true
+        end
+
+        false
       end
 
       def parse_fields
-        done = false
-        until done
-          done = parse_field
-        end
+        until parse_field; end
       end
 
       def parse
@@ -156,8 +158,10 @@ module InfluxDB
         parse_fields
 
         type, value = next_token
-        if type != :NIL
+        if type == :WORD
           @metric.timestamp = value
+        elsif type != :NIL
+          parse_error(:WORD)
         end
 
         @metric
