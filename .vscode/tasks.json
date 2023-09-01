@@ -1,0 +1,52 @@
+{
+   // See https://go.microsoft.com/fwlink/?LinkId=733558
+   // for the documentation about the tasks.json format
+   "version": "2.0.0",
+   "tasks": [
+    {
+      "label": "build-project",
+      "type": "shell",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "options": {
+        "cwd": "${workspaceFolder}",
+      },
+      "presentation": {
+        "clear": true
+      },
+      "command": "bundle exec ruby -v"
+    },
+    {
+      "label": "test-project",
+      "type": "shell",
+      "presentation": {
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "command": "bundle exec rspec ${workspaceRoot}"
+    },
+    {
+      "label": "lint-project",
+      "type": "shell",
+      "presentation": {
+        "clear": true
+      },
+      "command": "/usr/bin/env rubocop ${workspaceRoot}",
+      "problemMatcher": []
+    },
+    {
+      "label": "lint-file",
+      "type": "shell",
+      "presentation": {
+        "clear": true
+      },
+      "command": "/usr/bin/env rubocop ${file}",
+      "problemMatcher": []
+    }
+  ]
+}
