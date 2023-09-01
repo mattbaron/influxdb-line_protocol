@@ -3,7 +3,7 @@ require 'influxdb/line_protocol'
 metrics = []
 
 lines = [
-  'foo,dc=blah f=123 93842938439',
+  'foo\ bar,dc=blah f=123 93842938439',
   'foo,dc=sneeb f=456',
   'foo,name=Matt\ Baron f=999,size=3,status="Running , 0 days"',
   'foo,dc=blah f=123,f2="abc"',
@@ -15,7 +15,8 @@ lines = [
   'good f=9988.2',
   'bad,dc=bar f=-87.23, 234234',
   'good f=999',
-  'bad,dc=foo,abc=sdfa f=123'
+  'good,dc=foo,abc=sdfa f=123',
+  'foo'
 ]
 
 lines.each do |line|

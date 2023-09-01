@@ -7,7 +7,8 @@ module InfluxDB
         @line = line.strip
         @index = -1
         @delim = [' ', ',', '=', nil]
-        @tokens = []
+
+        @token_cache = []
 
         @token = nil
         @value = nil
@@ -27,16 +28,6 @@ module InfluxDB
         @index += 1
         @line[@index]
       end
-
-      # def tokenize
-      #   tokens = []
-      #   loop do
-      #     tokens << next_token(@delim)
-      #     puts tokens.to_json
-      #     break if tokens.last == :NIL
-      #   end
-      #   tokens
-      # end
 
       def next_token
         buff = []
@@ -90,8 +81,6 @@ module InfluxDB
 
       def parse_tag
         type, tag_name = next_token
-
-        # return true if type == :SPACE
 
         return false if type == :COMMA
 
@@ -153,6 +142,8 @@ module InfluxDB
 
         if type == :COMMA
           parse_tags
+        else
+          parse_error(:SPACE) unless type == :SPACE
         end
 
         parse_fields
