@@ -16,7 +16,7 @@
       "presentation": {
         "clear": true
       },
-      "command": "bundle exec ruby -v"
+      "command": "bundle exec ruby bin/test.rb"
     },
     {
       "label": "test-project",

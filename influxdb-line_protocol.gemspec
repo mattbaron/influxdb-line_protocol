@@ -4,7 +4,7 @@ require_relative "lib/influxdb/line_protocol/version"
 
 Gem::Specification.new do |spec|
   spec.name = "influxdb-line_protocol"
-  spec.version = Influxdb::LineProtocol::VERSION
+  spec.version = InfluxDB::LineProtocol::VERSION
   spec.authors = ["Matt Baron"]
   spec.email = ["mwb@unitf.net"]
 
